@@ -4,99 +4,134 @@ import Modal from "./Modal";
 import RideCard from "./RideCard";
 
 const Travel_InfoList = () => {
-  const [selectedModes, setSelectedModes] = useState([]);  // Track selected modes
-  const [durationRange, setDurationRange] = useState(10);  // Track selected duration range (default to minimum value)
-  const [selectedRide, setSelectedRide] = useState(null);  // Track the selected ride for the modal
-  const [isModalOpen, setIsModalOpen] = useState(false);  // Modal state
+  const [searchTerm, setSearchTerm] = useState(""); // Bagong state para sa Search
+  const [selectedModes, setSelectedModes] = useState([]);
+  const [durationRange, setDurationRange] = useState(240); // Ginawa kong max default para makita lahat sa simula
+  const [selectedRide, setSelectedRide] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Unique mode options from the rides data
   const modeOptions = [...new Set(rides.map((ride) => ride.mode))];
 
-  // Handle mode checkbox changes
   const handleModeChange = (mode) => {
     setSelectedModes((prevModes) =>
       prevModes.includes(mode)
-        ? prevModes.filter((m) => m !== mode)  // Remove mode if unchecked
-        : [...prevModes, mode]  // Add mode if checked
+        ? prevModes.filter((m) => m !== mode)
+        : [...prevModes, mode],
     );
   };
 
-  // Handle opening the modal with selected ride details
   const openModal = (ride) => {
     setSelectedRide(ride);
     setIsModalOpen(true);
   };
 
-  // Handle closing the modal
   const closeModal = () => {
     setSelectedRide(null);
     setIsModalOpen(false);
   };
 
-  // Filter rides based on selected filters (mode and duration)
+  // Filter logic (Search + Mode + Duration)
   const filteredRides = rides.filter((ride) => {
-    const matchesMode = selectedModes.length === 0 || selectedModes.includes(ride.mode);  // Filter by mode
-    const matchesDuration = ride.duration <= durationRange;  // Filter by duration in minutes
-    return matchesMode && matchesDuration;
+    const matchesSearch = ride.title
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
+    const matchesMode =
+      selectedModes.length === 0 || selectedModes.includes(ride.mode);
+    const matchesDuration = ride.duration <= durationRange;
+
+    return matchesSearch && matchesMode && matchesDuration;
   });
 
   return (
-    <div>
-      {/* Filters */}
+    <div className="p-4">
+      {/* Search Bar Section */}
       <div className="mb-6">
-        <h3 className="font-semibold">Mode</h3>
-        <div className="flex flex-wrap gap-2">
-          {modeOptions.map((mode) => (
-            <label key={mode} className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                value={mode}
-                checked={selectedModes.includes(mode)}
-                onChange={() => handleModeChange(mode)}
-              />
-              <span>{mode}</span>
-            </label>
-          ))}
+        <h3 className="font-semibold mb-2">Search Destination</h3>
+        <input
+          type="text"
+          placeholder="Where do you want to go?..."
+          className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
+
+      <div className="flex flex-col md:flex-row gap-8">
+        {/* Sidebar Filters */}
+        <div className="w-full md:w-1/4">
+          <div className="mb-6">
+            <h3 className="font-semibold mb-2">Mode</h3>
+            <div className="flex flex-col gap-2">
+              {modeOptions.map((mode) => (
+                <label
+                  key={mode}
+                  className="flex items-center space-x-2 cursor-pointer"
+                >
+                  <input
+                    type="checkbox"
+                    className="rounded text-blue-600"
+                    value={mode}
+                    checked={selectedModes.includes(mode)}
+                    onChange={() => handleModeChange(mode)}
+                  />
+                  <span className="text-sm">{mode}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <div className="mb-6">
+            <h3 className="font-semibold mb-2">Max Duration</h3>
+            <input
+              type="range"
+              min="10"
+              max="240"
+              step="10"
+              value={durationRange}
+              onChange={(e) => setDurationRange(Number(e.target.value))}
+              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+            />
+            <div className="text-sm mt-2 text-gray-600">
+              Up to {durationRange} minutes
+            </div>
+          </div>
+        </div>
+
+        {/* Rides List Section */}
+        <div className="w-full md:w-3/4">
+          <div className="grid gap-6 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
+            {filteredRides.length > 0 ? (
+              filteredRides.map((ride) => (
+                <RideCard key={ride.id} ride={ride} openModal={openModal} />
+              ))
+            ) : (
+              <div className="col-span-full text-center py-10 text-gray-500">
+                Walang nahanap na biyahe. Try mong baguhin ang filters.
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
-      <div className="mb-6">
-        <h3 className="font-semibold">Duration (in minutes)</h3>
-        <input
-          type="range"
-          min="10"  // Minimum duration
-          max="240" // Maximum duration
-          step="10"
-          value={durationRange}  // Bind slider value to state
-          onChange={(e) => setDurationRange(Number(e.target.value))}  // Update state with selected value
-          className="w-full"
-        />
-        <div className="text-sm mt-2">Up to {durationRange} minutes</div>
-      </div>
-
-      {/* Rides List */}
-      <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-        {filteredRides.map((ride) => (
-          <RideCard
-            key={ride.id}
-            ride={ride}
-            openModal={openModal}  // Pass function to open the modal with selected ride details
-          />
-        ))}
-      </div>
-
-      {/* Modal for selected ride */}
+      {/* Modal Setup */}
       {isModalOpen && selectedRide && (
         <Modal isOpen={isModalOpen} onClose={closeModal}>
-          <div>
-            <h2 className="text-xl font-bold mb-4">{selectedRide.title}</h2>
-            <p className="mb-2">
-              <strong>Mode:</strong> {selectedRide.mode}
-            </p>
-            <p className="mb-2">
-              <strong>Duration:</strong> {selectedRide.duration} minutes
-            </p>
-            <p>{selectedRide.description}</p>
+          <div className="p-2">
+            <h2 className="text-2xl font-bold mb-4 text-blue-800">
+              {selectedRide.title}
+            </h2>
+            <div className="space-y-3">
+              <p>
+                <strong>🚀 Mode:</strong> {selectedRide.mode}
+              </p>
+              <p>
+                <strong>⏱ Duration:</strong> {selectedRide.duration} mins
+              </p>
+              <hr />
+              <p className="leading-relaxed text-gray-700">
+                {selectedRide.description}
+              </p>
+            </div>
           </div>
         </Modal>
       )}
