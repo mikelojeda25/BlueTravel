@@ -1,0 +1,72 @@
+[
+  {
+    "id": 101,
+    "mode": "Airplane",
+    "title": "Discover Paris",
+    "description": "Explore Paris and its landmarks.",
+    "duration": 10
+  },
+  {
+    "id": 102,
+    "mode": "Train",
+    "title": "Swiss Alps Adventure",
+    "description": "Travel through the Alps.",
+    "duration": 20
+  },
+  {
+    "id": 103,
+    "mode": "Ship",
+    "title": "Caribbean Cruise",
+    "description": "Relax on pristine beaches.",
+    "duration": 60
+  },
+  {
+    "id": 104,
+    "mode": "Bus",
+    "title": "Grand Tour of Italy",
+    "description": "Tour Italy, from Rome to Venice, by bus.",
+    "duration": 80
+  },
+  {
+    "id": 105,
+    "mode": "Car",
+    "title": "Road Trip Across America",
+    "description": "Experience the American highways and landmarks.",
+    "duration": 240
+  },
+  {
+    "id": 106,
+    "mode": "Airplane",
+    "title": "Safari in South Africa",
+    "description": "Fly to South Africa for a safari adventure.",
+    "duration": 150
+  },
+  {
+    "id": 107,
+    "mode": "Train",
+    "title": "Journey to Kyoto",
+    "description": "Explore Japan by high-speed train to Kyoto.",
+    "duration": 120
+  },
+  {
+    "id": 108,
+    "mode": "Ship",
+    "title": "Mediterranean Odyssey",
+    "description": "Sail the Mediterranean and visit famous cities.",
+    "duration": 240
+  },
+  {
+    "id": 109,
+    "mode": "Bus",
+    "title": "Explore Southeast Asia",
+    "description": "Take a bus tour through Southeast Asia.",
+    "duration": 200
+  },
+  {
+    "id": 110,
+    "mode": "Car",
+    "title": "Pacific Coast Highway",
+    "description": "Drive along the scenic Pacific Coast Highway.",
+    "duration": 180
+  }
+]
