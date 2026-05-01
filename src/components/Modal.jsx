@@ -1,21 +1,27 @@
-import React from "react";
+import PropTypes from "prop-types";
 
 const Modal = ({ isOpen, onClose, children }) => {
-  if (!isOpen) return null; // Do not render if modal is not open
+  if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="bg-white rounded-lg shadow-lg p-6 w-96 relative">
+    <div className="fixed inset-0 flex items-center justify-center bg-black/70 backdrop-blur-sm z-50">
+      <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl shadow-2xl p-8 w-full max-w-md relative border border-cyan-500/30">
         <button
-          className="absolute top-4 right-4 text-gray-600 hover:text-gray-800"
+          className="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors text-2xl"
           onClick={onClose}
         >
-          ✖
+          ✕
         </button>
         <div>{children}</div>
       </div>
     </div>
   );
+};
+
+Modal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  children: PropTypes.node.isRequired,
 };
 
 export default Modal;
