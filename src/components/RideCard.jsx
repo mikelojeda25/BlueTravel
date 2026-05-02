@@ -17,7 +17,7 @@ const RideCard = ({ ride, openModal }) => {
         </p>
       </div>
       <button
-        className="w-full px-6 py-3 bg-gradient-to-r from-cyan-500 to-purple-500 text-white rounded-lg hover:from-cyan-400 hover:to-purple-400 transition-all duration-300 shadow-lg hover:shadow-cyan-500/25"
+        className="w-full px-1 py-3 bg-gradient-to-r from-cyan-500 to-purple-500 text-white rounded-lg hover:from-cyan-400 hover:to-purple-400 transition-all duration-300 shadow-lg hover:shadow-cyan-500/25"
         onClick={() => openModal(ride)}
       >
         View Details
